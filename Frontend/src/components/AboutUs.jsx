@@ -48,73 +48,98 @@ const AboutUs = () => {
       </div>
 
       {/* Philosophy Section */}
-      <div className="relative bg-[#8B2321] py-16 px-6 sm:px-12 md:px-20 rounded-2xl shadow-xl
-                      animate-fadeIn">
-        <div className="text-center md:text-left mx-auto max-w-4xl text-white">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-shadow-lg
-                         animate-slideInLeft hover:scale-105 transition-transform duration-300 inline-block">
-            Masterpieces in Every Bite
+      <div className="relative bg-white py-16 px-6 sm:px-12 md:px-20 rounded-2xl shadow-xl border border-gray-200
+                      animate-fadeIn mb-20 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 z-0 opacity-5"
+             style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0,50 Q10,60 20,50 T40,50 T60,50 T80,50 T100,50 V0 H0 Z' fill='%238B2321'/%3E%3C/svg%3E")`,
+             }}>
+        </div>
+        <div className="relative z-10 text-center md:text-left mx-auto max-w-4xl">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 text-gray-900
+                         text-shadow-xl animate-slideInLeft hover:text-[#8B2321] transition-colors duration-300">
+            The Art of Confectionery
           </h2>
-          <p className="text-lg sm:text-xl text-white/90 animate-fadeIn delay-100
-                       text-shadow-lg hover:text-white transition-colors duration-300">
-            Every treat we make is crafted with intention—beautiful to look at and even better to taste. From bold flavors to delicate details, we pour creativity into every piece so each bite feels special. Whether it’s a classic favorite or a brand-new creation, our sweets are made to surprise, delight, and keep you coming back for more.
+          <p className="text-lg sm:text-xl text-gray-600 animate-fadeIn delay-100
+                       text-shadow-lg hover:text-gray-700 transition-colors duration-300 leading-relaxed">
+            From classic candies to unique creations, we take pride in our
+            diverse selection. Each sweet is a small work of art, made to
+            delight your senses and satisfy your cravings. We are constantly
+            experimenting to bring you the next perfect treat.
           </p>
         </div>
       </div>
 
       {/* Why Us? Section */}
-      <div className="mt-16 text-center">
-        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-12 leading-tight tracking-tight
-                       text-shadow-lg animate-slideInLeft hover:text-[#8B2321] transition-colors duration-300">
+      <div className="text-center">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight tracking-tight
+                       text-shadow-xl animate-slideInLeft hover:text-[#8B2321] transition-colors duration-300">
           Why Choose Us?
         </h2>
+        <p className="text-lg sm:text-xl text-gray-600 mb-12 max-w-2xl mx-auto
+                      animate-fadeIn delay-100 text-shadow-lg">
+          Discover what makes our sweet shop special
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Box 1 */}
           <div className="bg-gray-50 p-8 rounded-2xl shadow-lg transform transition-all duration-300 
-                         hover:scale-105 hover:shadow-xl cursor-pointer border border-gray-200
-                         animate-fadeIn"
+                         hover:scale-110 hover:shadow-2xl cursor-pointer border border-gray-200
+                         animate-fadeIn group"
                style={{ animationDelay: '0.1s' }}>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 hover:text-[#8B2321] transition-colors duration-300">
+            <div className="text-4xl mb-4 transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12">
+              🌟
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#8B2321] transition-colors duration-300">
               Quality Ingredients
             </h3>
-            <p className="text-gray-600 hover:text-gray-700 transition-colors duration-300">
+            <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
               We use only the finest ingredients to craft our delicious treats.
             </p>
           </div>
           {/* Box 2 */}
           <div className="bg-gray-50 p-8 rounded-2xl shadow-lg transform transition-all duration-300 
-                         hover:scale-105 hover:shadow-xl cursor-pointer border border-gray-200
-                         animate-fadeIn"
+                         hover:scale-110 hover:shadow-2xl cursor-pointer border border-gray-200
+                         animate-fadeIn group"
                style={{ animationDelay: '0.2s' }}>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 hover:text-[#8B2321] transition-colors duration-300">
+            <div className="text-4xl mb-4 transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12">
+              ❤️
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#8B2321] transition-colors duration-300">
               Handcrafted with Love
             </h3>
-            <p className="text-gray-600 hover:text-gray-700 transition-colors duration-300">
+            <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
               Every sweet is made with care and passion by our dedicated team.
             </p>
           </div>
           {/* Box 3 */}
           <div className="bg-gray-50 p-8 rounded-2xl shadow-lg transform transition-all duration-300 
-                         hover:scale-105 hover:shadow-xl cursor-pointer border border-gray-200
-                         animate-fadeIn"
+                         hover:scale-110 hover:shadow-2xl cursor-pointer border border-gray-200
+                         animate-fadeIn group"
                style={{ animationDelay: '0.3s' }}>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 hover:text-[#8B2321] transition-colors duration-300">
+            <div className="text-4xl mb-4 transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12">
+              🎨
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#8B2321] transition-colors duration-300">
               Unique Flavors
             </h3>
-            <p className="text-gray-600 hover:text-gray-700 transition-colors duration-300">
+            <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
               We constantly innovate to bring you unique and exciting flavor
               combinations.
             </p>
           </div>
           {/* Box 4 */}
           <div className="bg-gray-50 p-8 rounded-2xl shadow-lg transform transition-all duration-300 
-                         hover:scale-105 hover:shadow-xl cursor-pointer border border-gray-200
-                         animate-fadeIn"
+                         hover:scale-110 hover:shadow-2xl cursor-pointer border border-gray-200
+                         animate-fadeIn group"
                style={{ animationDelay: '0.4s' }}>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 hover:text-[#8B2321] transition-colors duration-300">
+            <div className="text-4xl mb-4 transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12">
+              😊
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#8B2321] transition-colors duration-300">
               Customer Delight
             </h3>
-            <p className="text-gray-600 hover:text-gray-700 transition-colors duration-300">
+            <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
               Your happiness is our top priority, and we strive to provide the
               best service.
             </p>
