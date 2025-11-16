@@ -5,7 +5,6 @@
 A full-stack **Sweet Shop Management System**, built as a **TDD (Test-Driven Development) kata**.  
 It demonstrates skills in API development, database management, frontend implementation, DevOps practices, and the responsible use of AI tools.
 
-Live Demo 👉 [Sweet Shop on Vercel](https://sweet-ten.vercel.app/)
 
 ---
 
@@ -59,28 +58,6 @@ See the **Test Reports** section for details.
 - **Deployment:** Vercel  
 - **CI/CD:** GitHub Actions  
 - **Version Control:** GitHub (AI co-author metadata where AI-assisted)  
-
----
-
-## 📸 Screenshots
-<details>
-<summary>Click to expand</summary>
-
-![Hero Section](/Screenshots/hero.png)
-![Popular Sweets](/Screenshots/popular-sweets.png)
-![About Us](/Screenshots/about-us.png)
-![Why Us](/Screenshots/why-us.png)
-![Contact Us](/Screenshots/contactus.png)
-![Footer](/Screenshots/footer.png)
-![Login](/Screenshots/login.png)
-![Sign Up](/Screenshots/signup.png)
-![All Sweets](/Screenshots/all-sweets.png)
-![Buy Sweets](/Screenshots/buy-sweet.png)
-![Profile](/Screenshots/profile.png)
-![Admin Dashboard](/Screenshots/admin-dashboard.png)
-![Add New Sweet](/Screenshots/add-new-sweet.png)
-
-</details>
 
 ---
 
@@ -187,10 +164,6 @@ npm test
 - [x] Env vars via `.env` (never commit real secrets)  
 - [x] CORS with whitelist  
 
----
-
-## 🌐 Deployment
-Deployed via Vercel 👉 [Live Demo](https://sweet-ten.vercel.app/)
 
 ---
 
