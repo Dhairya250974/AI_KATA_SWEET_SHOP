@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import API from "../api/axiosInstance";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
@@ -10,10 +10,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchPurchases = async () => {
       try {
-        // Using a placeholder URL for the backend to allow the UI to render.
-        const res = await axios.get("/Bakend server/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await API.get("/auth/me");
         setPurchases(res.data.purchases || []);
       } catch (err) {
         console.error("Error fetching user purchases:", err);

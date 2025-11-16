@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { addSweet } from "../api/sweets";
 import { AuthContext } from "../context/AuthContext";
 
 const AddSweet = () => {
@@ -22,23 +22,38 @@ const AddSweet = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const addSweet = async () => {
+  const handleAddSweet = async () => {
     // Basic validation
-    if (!form.name || !form.category || !form.price || !form.quantity) {
-      setMessage("❌ Please fill all required fields");
+    if (!form.name || !form.price) {
+      setMessage("❌ Name and price are required");
+      return;
+    }
+
+    if (form.price && (isNaN(form.price) || Number(form.price) <= 0)) {
+      setMessage("❌ Price must be a positive number");
+      return;
+    }
+
+    if (form.quantity && (isNaN(form.quantity) || Number(form.quantity) < 0)) {
+      setMessage("❌ Quantity must be a non-negative number");
       return;
     }
 
     setLoading(true);
     try {
-      await axios.post("https://backend-nine-zeta-55.vercel.app/api/sweets", form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const sweetData = {
+        name: form.name,
+        category: form.category || undefined,
+        price: Number(form.price),
+        quantity: form.quantity ? Number(form.quantity) : 0,
+        image: form.image || undefined,
+      };
+      await addSweet(sweetData);
       setMessage("✅ Sweet added successfully");
       setTimeout(() => navigate("/admin"), 1500);
     } catch (err) {
       console.error("Error adding sweet:", err);
-      setMessage("❌ Failed to add sweet");
+      setMessage(err.response?.data?.error || "❌ Failed to add sweet");
     } finally {
       setLoading(false);
     }
@@ -106,7 +121,7 @@ const AddSweet = () => {
           </div>
         </div>
         <button
-          onClick={addSweet}
+          onClick={handleAddSweet}
           disabled={loading}
           className={`mt-6 w-full px-4 py-3  text-white cursor-pointer font-semibold shadow-md transition-colors ${
             loading

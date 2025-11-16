@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import API from "../api/axiosInstance";
+import { purchaseSweet } from "../api/sweets";
 import { AuthContext } from "../context/AuthContext";
 import PopularSweets from "../components/PopularSweets";
 
@@ -16,32 +17,38 @@ const SweetDetail = () => {
   useEffect(() => {
     const fetchSweet = async () => {
       try {
-        const res = await axios.get(`/Bakend server/api/sweets/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await API.get(`/sweets/${id}`);
         setSweet(res.data.data || res.data);
       } catch (err) {
         console.error("Error fetching sweet:", err);
         setMessage("❌ Failed to fetch sweet details.");
       }
     };
-    fetchSweet();
+    if (token) {
+      fetchSweet();
+    } else {
+      setMessage("❌ Please login to view sweet details.");
+    }
   }, [id, token]);
 
   // Purchase
   const handlePurchase = async () => {
+    if (!token) {
+      setMessage("❌ Please login to purchase.");
+      return;
+    }
+    if (quantity <= 0 || quantity > sweet.quantity) {
+      setMessage("❌ Invalid quantity.");
+      return;
+    }
     try {
-      await axios.post(
-        `/Bakend server/api/sweets/${id}/purchase`,
-        { quantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await purchaseSweet(id, quantity);
       setMessage("✅ Purchase successful!");
       // Redirect after a short delay to allow the user to see the success message
       setTimeout(() => navigate("/profile"), 1500);
     } catch (err) {
       console.error("Error purchasing:", err);
-      setMessage("❌ Failed to purchase. Maybe stock is low.");
+      setMessage(err.response?.data?.error || "❌ Failed to purchase. Maybe stock is low.");
     }
   };
 

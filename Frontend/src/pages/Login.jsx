@@ -7,22 +7,52 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     try {
+      console.log("Attempting login...");
       const res = await loginUser(username, password);
-      login(res.data.user, res.data.token);
+      console.log("Login response:", res.data);
+      
+      if (res.data.token && res.data.user) {
+        login(res.data.user, res.data.token);
 
-      if (res.data.user.role === "admin") {
-        navigate("/admin");
+        if (res.data.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       } else {
-        navigate("/dashboard");
+        setError("Invalid response from server");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      console.error("Login error:", err);
+      console.error("Error details:", {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status
+      });
+      
+      let errorMessage = "Login failed";
+      if (err.code === "ERR_NETWORK" || err.message === "Network Error") {
+        errorMessage = "Cannot connect to server. Please check if the backend is running.";
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,9 +124,14 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#8B2321] text-white py-3 font-semibold transition-colors cursor-pointer"
+                disabled={loading}
+                className={`w-full py-3 font-semibold transition-colors ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#8B2321] hover:bg-[#6B1A19] cursor-pointer"
+                } text-white rounded-full shadow-lg transform hover:scale-105 active:scale-95`}
               >
-                Login
+                {loading ? "Logging in..." : "Login"}
               </button>
               <p className="text-center text-gray-600 text-sm">
                 Already have an account?{" "}

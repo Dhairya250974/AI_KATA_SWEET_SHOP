@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import { getSweets, searchSweets } from "../api/sweets";
 import SweetCard from "../components/SweetCard";
 
 const AllSweets = () => {
@@ -11,7 +11,7 @@ const AllSweets = () => {
 
   const fetchSweets = async () => {
     try {
-      const res = await axios.get("/Bakend server");
+      const res = await getSweets();
       setSweets(res.data.data || res.data);
     } catch (err) {
       console.error("Error fetching sweets:", err);
@@ -26,10 +26,7 @@ const AllSweets = () => {
       if (minPrice) params.minPrice = minPrice;
       if (maxPrice) params.maxPrice = maxPrice;
 
-      const res = await axios.get("https://backend-nine-zeta-55.vercel.app/api/sweets/search", {
-        params,
-      });
-
+      const res = await searchSweets(params);
       setSweets(res.data.data || res.data);
     } catch (err) {
       console.error("Error searching sweets:", err);

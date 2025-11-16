@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState, useContext, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { getSweets, searchSweets, deleteSweet, restockSweet } from "../api/sweets";
 import { AuthContext } from "../context/AuthContext";
 
 const AdminDashboard = () => {
@@ -19,10 +19,8 @@ const AdminDashboard = () => {
 
   const fetchSweets = async () => {
     try {
-      const res = await axios.get("Backend Server", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSweets(res.data.data);
+      const res = await getSweets();
+      setSweets(res.data.data || res.data);
     } catch (err) {
       console.error("Error fetching sweets:", err);
       setMessage("Failed to fetch sweets");
@@ -37,10 +35,7 @@ const AdminDashboard = () => {
       if (minPrice) params.minPrice = minPrice;
       if (maxPrice) params.maxPrice = maxPrice;
 
-      const res = await axios.get("/Bakend server", {
-        params,
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await searchSweets(params);
       setSweets(res.data.data || res.data);
     } catch (err) {
       console.error("Error searching sweets:", err);
@@ -76,12 +71,10 @@ const AdminDashboard = () => {
   }, [user, navigate, name, category, minPrice, maxPrice]);
 
   // Delete a sweet
-    const deleteSweet = async (id) => {
+  const handleDeleteSweet = async (id) => {
     if (!window.confirm("Are you sure you want to delete this sweet?")) return;
     try {
-      await axios.delete(`/Bakend server${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await deleteSweet(id);
       setMessage("📦 Sweet deleted successfully");
       fetchSweets();
     } catch (err) {
@@ -91,15 +84,14 @@ const AdminDashboard = () => {
   };
 
   // Restock a sweet
-  const restockSweet = async (id) => {
+  const handleRestockSweet = async (id) => {
     const qty = prompt("Enter quantity to restock:");
-    if (!qty || isNaN(qty)) return;
+    if (!qty || isNaN(qty) || Number(qty) <= 0) {
+      setMessage("❌ Invalid quantity");
+      return;
+    }
     try {
-      await axios.post(
-        `/Bakend server${id}/restock`,
-        { quantity: Number(qty) },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await restockSweet(id, Number(qty));
       setMessage("📦 Sweet restocked successfully");
       fetchSweets();
     } catch (err) {
@@ -221,13 +213,13 @@ const AdminDashboard = () => {
                 </p>
                 <div className="mt-4 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-2">
                   <button
-                    onClick={() => deleteSweet(sweet._id)}
+                    onClick={() => handleDeleteSweet(sweet._id)}
                     className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-full transition-colors shadow-sm font-semibold"
                   >
                     Delete
                   </button>
                   <button
-                    onClick={() => restockSweet(sweet._id)}
+                    onClick={() => handleRestockSweet(sweet._id)}
                     className="w-full sm:w-auto bg-[#8B2321] text-white px-4 py-2 rounded-full  transition-colors shadow-sm font-semibold"
                   >
                     Restock

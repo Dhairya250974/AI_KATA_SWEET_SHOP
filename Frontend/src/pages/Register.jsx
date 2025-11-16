@@ -1,28 +1,91 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { registerUser } from "../api/auth";
+import { registerUser, loginUser } from "../api/auth";
 import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+    
+    // Frontend validation
+    if (username.length < 3) {
+      setError("Username must be at least 3 characters long");
+      setLoading(false);
+      return;
+    }
+    
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      setLoading(false);
+      return;
+    }
+    
     try {
+      console.log("Attempting registration...");
       const res = await registerUser(username, password);
-      login(res.data.user, res.data.token);
-
-      if (res.data.user.role === "admin") {
-        navigate("/admin");
+      console.log("Registration response:", res.data);
+      
+      // Check if registration was successful and token is provided
+      if (res.data.token && res.data.user) {
+        login(res.data.user, res.data.token);
+        
+        if (res.data.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+      } else if (res.data.user) {
+        // If user created but no token, try to login
+        try {
+          const loginRes = await loginUser(username, password);
+          if (loginRes.data.token && loginRes.data.user) {
+            login(loginRes.data.user, loginRes.data.token);
+            
+            if (loginRes.data.user.role === "admin") {
+              navigate("/admin");
+            } else {
+              navigate("/");
+            }
+          }
+        } catch (loginErr) {
+          // Registration succeeded but auto-login failed
+          setError("Registration successful! Please login.");
+          setTimeout(() => navigate("/login"), 2000);
+        }
       } else {
-        navigate("/dashboard");
+        setError("Registration failed: Invalid response from server");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      console.error("Registration error:", err);
+      console.error("Error details:", {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status
+      });
+      
+      let errorMessage = "Registration failed";
+      if (err.code === "ERR_NETWORK" || err.message === "Network Error") {
+        errorMessage = "Cannot connect to server. Please check if the backend is running.";
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,9 +157,14 @@ const Register = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#8B2321] text-white py-3 font-semibold cursor-pointer"
+                disabled={loading}
+                className={`w-full py-3 font-semibold transition-colors ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#8B2321] hover:bg-[#6B1A19] cursor-pointer"
+                } text-white rounded-full shadow-lg transform hover:scale-105 active:scale-95`}
               >
-                Sign Up
+                {loading ? "Signing up..." : "Sign Up"}
               </button>
               <p className="text-center text-gray-600 text-sm">
                 Already have an account?{" "}
